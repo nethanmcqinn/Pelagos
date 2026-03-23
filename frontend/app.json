@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Pelagos",
-    "slug": "cvpetshop-app",
+    "slug": "pelagos",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,7 +13,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.cvpetshop.app",
+      "bundleIdentifier": "com.nethanmcqinn.pelagos",
       "infoPlist": {
         "UIBackgroundModes": [
           "remote-notification"
@@ -21,7 +21,7 @@
       }
     },
     "android": {
-      "package": "com.cvpetshop.app",
+      "package": "com.nethanmcqinn.pelagos",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -42,24 +42,20 @@
     "plugins": [
       "expo-sqlite",
       "expo-secure-store",
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/notification-icon.png",
-          "color": "#f39c12",
-          "sounds": [
-            "./assets/notification-sound.wav"
-          ],
-          "mode": "production"
-        }
-      ],
+      "expo-notifications",
       "@react-native-community/datetimepicker"
     ],
     "extra": {
       "eas": {
-        "projectId": "0fdd36f5-60f3-461b-9b34-8de675c79f7f"
+        "projectId": "03bd4f2e-587b-48d9-870e-b67bc2b73eca"
       }
     },
-    "owner": "dwaynewrld"
+    "owner": "nethanmcqinn",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/03bd4f2e-587b-48d9-870e-b67bc2b73eca"
+    }
   }
 }
