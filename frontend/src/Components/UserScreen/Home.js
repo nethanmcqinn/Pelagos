@@ -141,6 +141,8 @@ export default function HomeScreen({ navigation }) {
   const [searchQuery,      setSearchQuery]      = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortAscending,    setSortAscending]    = useState(false);
+  const [minPrice,         setMinPrice]         = useState('');
+  const [maxPrice,         setMaxPrice]         = useState('');
   const [showCategories,   setShowCategories]   = useState(false);
   const [cart,             setCart]             = useState([]);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
@@ -162,7 +164,7 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     filterAndSortProducts();
-  }, [products, selectedCategory, searchQuery, sortAscending]);
+  }, [products, selectedCategory, searchQuery, sortAscending, minPrice, maxPrice]);
 
   useEffect(() => {
     if (BANNERS.length > 1) startAutoSlide();
@@ -284,6 +286,26 @@ export default function HomeScreen({ navigation }) {
       filtered = filtered.filter(p =>
         p.name?.toLowerCase().includes(q) || p.description?.toLowerCase().includes(q)
       );
+    }
+
+    // Price range filtering
+    if (minPrice.trim()) {
+      const min = parseFloat(minPrice);
+      if (!isNaN(min)) {
+        filtered = filtered.filter(p => {
+          const price = p.isOnSale && p.discountedPrice ? parseFloat(p.discountedPrice) : parseFloat(p.price || 0);
+          return price >= min;
+        });
+      }
+    }
+    if (maxPrice.trim()) {
+      const max = parseFloat(maxPrice);
+      if (!isNaN(max)) {
+        filtered = filtered.filter(p => {
+          const price = p.isOnSale && p.discountedPrice ? parseFloat(p.discountedPrice) : parseFloat(p.price || 0);
+          return price <= max;
+        });
+      }
     }
 
     // Sort products - if sorting by price, use the actual selling price (discounted if on sale)
@@ -467,7 +489,7 @@ export default function HomeScreen({ navigation }) {
             <Icon name="search" size={20} color={HOME_COLORS.accent} style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
-              placeholder="Search for pet products..."
+              placeholder="Search for seafood products..."
               placeholderTextColor={HOME_COLORS.mutedText}
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -515,6 +537,22 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.categorySelectorText} numberOfLines={1}>{selectedCategory}</Text>
               <Icon name="arrow-drop-down" size={22} color={HOME_COLORS.accent} />
             </TouchableOpacity>
+            <TextInput
+              style={styles.priceInput}
+              placeholder="Min ₱"
+              placeholderTextColor={HOME_COLORS.mutedText}
+              value={minPrice}
+              onChangeText={setMinPrice}
+              keyboardType="numeric"
+            />
+            <TextInput
+              style={styles.priceInput}
+              placeholder="Max ₱"
+              placeholderTextColor={HOME_COLORS.mutedText}
+              value={maxPrice}
+              onChangeText={setMaxPrice}
+              keyboardType="numeric"
+            />
             <TouchableOpacity style={styles.priceFilterButton} onPress={toggleSort}>
               <Icon name="attach-money" size={18} color={HOME_COLORS.accent} />
               <Text style={styles.priceFilterText} numberOfLines={1}>Price {sortAscending ? '↑' : '↓'}</Text>
@@ -721,7 +759,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
     borderColor: HOME_COLORS.borderGold,
-    flex: 0.48,
+    flex: 1,
+    marginRight: 8,
   },
   categorySelectorText: {
     fontSize: 13,
@@ -730,6 +769,19 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: '500',
     letterSpacing: 0.3,
+  },
+  priceInput: {
+    backgroundColor: HOME_COLORS.panelAlt,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: HOME_COLORS.borderGold,
+    color: HOME_COLORS.text,
+    fontSize: 13,
+    flex: 0.7,
+    marginHorizontal: 4,
+    textAlign: 'center',
   },
   priceFilterButton: {
     flexDirection: 'row',
@@ -741,7 +793,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
     borderColor: HOME_COLORS.borderGold,
-    flex: 0.48,
+    flex: 0.8,
+    marginLeft: 8,
   },
   priceFilterText: {
     fontSize: 13,
